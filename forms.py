@@ -1,17 +1,41 @@
 """Forms for Notes app."""
 from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField, BooleanField, IntegerField, SelectField
-from wtforms.validators import InputRequired, Optional, Email, URL
+from wtforms import StringField, PasswordField
+from wtforms.validators import InputRequired, Email, URL
 
 class RegisterForm(FlaskForm):
     """Form for registering users"""
 
-    username = StringField("Username", validators=[InputRequired()])
+    username = StringField(
+        "Username",
+        validators=[InputRequired()])
 
-    password = StringField("Password", validators=[InputRequired()])
+    password = PasswordField(
+        "Password",
+        validators=[InputRequired()])
 
-    email = StringField("Email", validators=[InputRequired(), Email()])
+    email = StringField(
+        "Email",
+        validators=[InputRequired(), Email()])
 
-    first_name = StringField("First Name", validators=[InputRequired()])
+    first_name = StringField(
+        "First Name",
+        validators=[InputRequired()])
 
-    last_name = StringField("Last Name", validators=[InputRequired()])
+    last_name = StringField(
+        "Last Name",
+        validators=[InputRequired()])
+
+class LoginForm(FlaskForm):
+    """Form to log in."""
+
+    username = StringField(
+        "Username",
+        validators=[InputRequired()])
+
+    password = PasswordField(
+        "Password",
+        validators=[InputRequired()])
+
+class CSRFProtectForm(FlaskForm):
+    """Form for CSRF protection."""

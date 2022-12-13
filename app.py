@@ -1,8 +1,8 @@
 """Notes application."""
 
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, session, flash
 from models import db, connect_db, User
-from forms import RegisterForm
+from forms import RegisterForm, LoginForm, CSRFProtectForm
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///notes'
@@ -40,9 +40,56 @@ def register_user():
         db.session.add(user)
         db.session.commit()
 
-        return redirect('/home')
+        session["user_id"] = user.username
+
+        return redirect(f'/users/{user.username}')
 
     else:
         return render_template("register.html", form=form)
 
+@app.route("/login", methods=["GET", "POST"])
+def login_user():
+    """Shows login form if not logged in, otherwise redirect to secret page."""
 
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+
+        user = User.authenticate(username, password)
+
+        if user:
+            session["user_id"] = user.username
+            return redirect(f"/users/{user.username}")
+        else:
+            form.username.errors = ["Bad username/password"]
+
+    return render_template("login.html", form=form)
+
+@app.get("/users/<username>")
+def show_user(username):
+    """Shows logged in user's profile."""
+
+    form = CSRFProtectForm()
+
+    if "user_id" not in session:
+        flash("You must be logged in to view!")
+
+        return redirect("/")
+
+    else:
+        user = User.query.get_or_404(username)
+
+        return render_template("user.html", user=user, form=form)
+
+@app.post("/logout")
+def logout_user():
+    """Logs out the user."""
+
+    form = CSRFProtectForm()
+
+    if form.validate_on_submit():
+        session.pop("user_id", None)
+
+        return redirect("/")
