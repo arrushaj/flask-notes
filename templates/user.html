@@ -5,11 +5,22 @@
 {% block content %}
 
 <h1>{{ user.username }}</h1>
-<ul class="list-group w-50">
+<ul class="list-group w-50 mb-2">
     <li class="list-group-item">Email: {{ user.email }}</li>
     <li class="list-group-item">First Name: {{ user.first_name }}</li>
     <li class="list-group-item">Last Name: {{ user.last_name }}</li>
 </ul>
+
+<ul class="list-group w-50 mb-2">
+{% for note in notes %}
+  <li class="list-group-item">
+    <a class="link-primary" href="/notes/{{note.id}}/update">{{note.title}}</a>
+    <button class="btn btn-secondary float-end" formmethod="POST" formaction="/notes/{{note.id}}/delete">Delete Note</button>
+  </li>
+{% endfor %}
+</ul>
+
+<a class="btn btn-primary" href="/users/{{user.username}}/notes/add">Add Note</a>
 
 <form id="logout-form" action="/logout" method="POST">
     {{ form.hidden_tag() }} <!--add type=hidden form fields -->
@@ -27,8 +38,8 @@
       </div>
 
     {% endfor %}
-
-    <button class="btn btn-danger mt-2" type="submit">Log Out</button>
+    <button class="btn btn-danger mt-2" formaction="/users/{{user.username}}/delete">Delete User</button><br>
+    <button class="btn btn-warning mt-2" type="submit">Log Out</button>
   </form>
 
 {% endblock%}
