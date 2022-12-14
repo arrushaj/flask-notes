@@ -3,7 +3,7 @@
 {% block title%} Add note {% endblock %}
 
 {% block content %}
-<form id="note-form" method="POST">
+<form id="add-note-form" method="POST">
   {{ form.hidden_tag() }} <!--add type=hidden form fields -->
 
   {% for field in form

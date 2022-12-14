@@ -4,7 +4,7 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import InputRequired, Email, URL
 
 class RegisterForm(FlaskForm):
-    """Form for registering users"""
+    """Form for registering users."""
 
     username = StringField(
         "Username",
@@ -41,7 +41,20 @@ class CSRFProtectForm(FlaskForm):
     """Form for CSRF protection."""
 
 class AddNoteForm(FlaskForm):
-    """Form for notes"""
+    """Form for adding notes."""
+
+    title = StringField(
+        "Title",
+        validators=[InputRequired()]
+    )
+
+    content = StringField(
+        "Content",
+        validators=[InputRequired()]
+    )
+
+class EditNoteForm(FlaskForm):
+    """Form for editing notes."""
 
     title = StringField(
         "Title",

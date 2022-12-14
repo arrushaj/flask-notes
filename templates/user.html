@@ -15,7 +15,10 @@
 {% for note in notes %}
   <li class="list-group-item">
     <a class="link-primary" href="/notes/{{note.id}}/update">{{note.title}}</a>
-    <button class="btn btn-secondary float-end" formmethod="POST" formaction="/notes/{{note.id}}/delete">Delete Note</button>
+    <form class="float-end" id="delete-note" action="/notes/{{note.id}}/delete" method="POST">
+      {{ form.hidden_tag() }}
+      <button class="btn btn-secondary">Delete Note</button>
+    </form>
   </li>
 {% endfor %}
 </ul>
@@ -23,21 +26,8 @@
 <a class="btn btn-primary" href="/users/{{user.username}}/notes/add">Add Note</a>
 
 <form id="logout-form" action="/logout" method="POST">
-    {{ form.hidden_tag() }} <!--add type=hidden form fields -->
+    {{ form.hidden_tag() }}
 
-    {% for field in form
-           if field.widget.input_type != 'hidden' %}
-
-      <div class="form-group">
-        {{ field.label }}
-        {{ field }}
-
-        {% for error in field.errors %}
-          {{ error }}
-        {% endfor %}
-      </div>
-
-    {% endfor %}
     <button class="btn btn-danger mt-2" formaction="/users/{{user.username}}/delete">Delete User</button><br>
     <button class="btn btn-warning mt-2" type="submit">Log Out</button>
   </form>
